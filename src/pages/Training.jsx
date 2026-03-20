@@ -327,7 +327,7 @@ export default function Training() {
 
   return (
     <div className="page">
-      <div style={{ background: 'linear-gradient(135deg, #6366f1, #ec4899)', color: 'white', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
+      <div style={{ background: 'linear-gradient(135deg, #6366f1, #ec4899)', color: 'white', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
         {editingTitle ? (
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <input
@@ -344,7 +344,7 @@ export default function Training() {
         ) : (
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <h2 style={{ margin: 0 }}>Block: {blockTitle}</h2>
+              <h2 style={{ margin: 0, fontSize: '1.1rem' }}>Block: {blockTitle}</h2>
               {currentBlock?.raceGoal && <p style={{ margin: '0.5rem 0 0 0', opacity: 0.9 }}>{currentBlock.raceGoal}</p>}
             </div>
             <button onClick={() => setEditingTitle(true)} style={{ background: 'transparent', color: 'white', border: '1px solid white', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.9rem' }}>Edit</button>
@@ -352,15 +352,15 @@ export default function Training() {
         )}
       </div>
 
-      <div style={{ background: '#f0f4ff', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button onClick={handlePrevWeek} disabled={currentWeek === 1} style={{ padding: '0.5rem 1rem' }}>← Prev</button>
-        <h3 style={{ margin: 0 }}>Week {currentWeek} of {currentBlock.weeks.length}</h3>
-        <button onClick={handleNextWeek} disabled={currentWeek >= currentBlock.weeks.length} style={{ padding: '0.5rem 1rem' }}>Next →</button>
+      <div style={{ background: '#f0f4ff', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <button onClick={handlePrevWeek} disabled={currentWeek === 1} style={{ padding: '0.4rem 0.75rem', fontSize: '0.85rem' }}>← Prev</button>
+        <h3 style={{ margin: 0, fontSize: '0.95rem' }}>Week {currentWeek} of {currentBlock.weeks.length}</h3>
+        <button onClick={handleNextWeek} disabled={currentWeek >= currentBlock.weeks.length} style={{ padding: '0.4rem 0.75rem', fontSize: '0.85rem' }}>Next →</button>
       </div>
 
       {isCurrentWeek && (
         <>
-          <div style={{ background: '#fff7ed', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem', border: '2px solid #f97316' }}>
+          <div style={{ background: '#fff7ed', padding: '1rem', borderRadius: '8px', marginBottom: '1rem', border: '2px solid #f97316' }}>
             <h3 style={{ margin: 0, marginBottom: '0.5rem' }}>Today's Plan</h3>
             <p style={{ margin: 0, marginBottom: '1rem', color: '#92400e', fontSize: '0.9rem' }}>{today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
             <div style={{ marginBottom: '1rem' }}>
@@ -380,8 +380,8 @@ export default function Training() {
               <select value={logActivity} onChange={(e) => setLogActivity(e.target.value)} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #fed7aa', fontFamily: 'inherit' }}>
                 {ACTIVITIES.map(a => <option key={a.id} value={a.id}>{a.emoji} {a.label}</option>)}
               </select>
-              <input type="number" placeholder="Duration (min)" value={logDuration} onChange={(e) => setLogDuration(e.target.value)} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #fed7aa', width: '120px' }} />
-              <input type="number" placeholder="Distance" step="0.1" value={logDistance} onChange={(e) => setLogDistance(e.target.value)} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #fed7aa', width: '120px' }} />
+              <input type="number" placeholder="Min" value={logDuration} onChange={(e) => setLogDuration(e.target.value)} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #fed7aa', flex: '1', minWidth: '80px', maxWidth: '120px' }} />
+              <input type="number" placeholder="Dist" step="0.1" value={logDistance} onChange={(e) => setLogDistance(e.target.value)} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #fed7aa', flex: '1', minWidth: '80px', maxWidth: '120px' }} />
             </div>
             <textarea
               value={whatIDid}
@@ -418,7 +418,7 @@ export default function Training() {
         </>
       )}
 
-      <div style={{ background: '#f0f4f8', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem', border: '1px solid #cbd5e1' }}>
+      <div style={{ background: '#f0f4f8', padding: '1rem', borderRadius: '8px', marginBottom: '1rem', border: '1px solid #cbd5e1' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <div>
             <h3 style={{ margin: 0 }}>Week {currentWeek} Totals</h3>
@@ -496,7 +496,7 @@ export default function Training() {
           </div>
         )}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.75rem' }}>
+      <div className="training-week-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.75rem' }}>
         {['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map((dayName, idx) => {
           const dayDate = new Date(weekStart);
           dayDate.setDate(dayDate.getDate() + idx);
@@ -514,10 +514,10 @@ export default function Training() {
           }
 
           return (
-            <div key={idx} style={{ border: '2px solid #e2e8f0', borderRadius: '8px', padding: '1rem', background: '#f8fafc', minHeight: '200px', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '2px solid #6366f1' }}>
-                <p style={{ margin: 0, fontWeight: 'bold', color: '#6366f1' }}>{dayName}</p>
-                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>{dateStr}</p>
+            <div key={idx} className="training-day-card" style={{ border: '2px solid #e2e8f0', borderRadius: '8px', padding: '0.75rem', background: idx === todayIndex ? '#fffbeb' : '#f8fafc', minHeight: '180px', display: 'flex', flexDirection: 'column' }}>
+              <div className="day-header" style={{ marginBottom: '0.5rem', paddingBottom: '0.4rem', borderBottom: `2px solid ${idx === todayIndex ? '#f59e0b' : '#6366f1'}` }}>
+                <p style={{ margin: 0, fontWeight: 'bold', color: idx === todayIndex ? '#d97706' : '#6366f1', fontSize: '0.85rem' }}>{dayName}</p>
+                <p style={{ margin: 0, fontSize: '0.7rem', color: '#64748b' }}>{dateStr}</p>
               </div>
               <div style={{ flex: 1, marginBottom: '0.5rem' }}>
                 {workoutList && workoutList.length > 0 ? (
