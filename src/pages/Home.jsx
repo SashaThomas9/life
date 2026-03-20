@@ -64,7 +64,7 @@ function Home() {
             
             // Add training workouts to checklist if not already there
             workouts.forEach(w => {
-              const workoutText = `🏃 ${w?.type}${w?.duration ? ` (${w.duration}min)` : ''}`;
+              const workoutText = `${w?.type}${w?.duration ? ` (${w.duration}min)` : ''}`;
               const exists = items.some(item => item.isTraining && item.trainingId === w?.id);
               if (!exists) {
                 items.unshift({

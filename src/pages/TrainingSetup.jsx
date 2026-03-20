@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { saveTrainingBlock } from '../utils/storage';
 
 const ACTIVITIES = [
-  { id: 'running', label: 'Running', emoji: '🏃', unit: 'km' },
-  { id: 'cycling', label: 'Cycling', emoji: '🚴', unit: 'km' },
-  { id: 'swimming', label: 'Swimming', emoji: '🏊', unit: 'm' },
-  { id: 'gym', label: 'Gym', emoji: '🏋️', unit: null },
-  { id: 'elliptical', label: 'Elliptical', emoji: '🔄', unit: 'km' },
-  { id: 'pilates', label: 'Pilates', emoji: '🧘', unit: null },
-  { id: 'other', label: 'Other', emoji: '⚡', unit: 'km' },
+  { id: 'running', label: 'Running', unit: 'km' },
+  { id: 'cycling', label: 'Cycling', unit: 'km' },
+  { id: 'swimming', label: 'Swimming', unit: 'm' },
+  { id: 'gym', label: 'Gym', unit: null },
+  { id: 'elliptical', label: 'Elliptical', unit: 'km' },
+  { id: 'pilates', label: 'Pilates', unit: null },
+  { id: 'other', label: 'Other', unit: 'km' },
 ];
 
 export default function TrainingSetup({ onSetupComplete }) {
@@ -110,7 +110,7 @@ export default function TrainingSetup({ onSetupComplete }) {
             >
               <option value="">Select activity...</option>
               {ACTIVITIES.filter(a => !addedActivities.includes(a.id)).map(a => (
-                <option key={a.id} value={a.id}>{a.emoji} {a.label}</option>
+                <option key={a.id} value={a.id}>{a.label}</option>
               ))}
             </select>
             <button
@@ -145,7 +145,7 @@ export default function TrainingSetup({ onSetupComplete }) {
                     const inc = initialGoals[act.id]?.increment || 0;
                     return (
                       <tr key={act.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                        <td style={{ padding: '0.5rem', fontWeight: '600', whiteSpace: 'nowrap' }}>{act.emoji} {act.label}</td>
+                        <td style={{ padding: '0.5rem', fontWeight: '600', whiteSpace: 'nowrap' }}>{act.label}</td>
                         <td style={{ padding: '0.5rem' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
                             <input type="number" placeholder="0" value={initialGoals[act.id]?.duration || ''} onChange={(e) => setInitialGoals(prev => ({ ...prev, [act.id]: { ...prev[act.id], duration: e.target.value ? parseInt(e.target.value) : 0 } }))} style={{ width: '55px', padding: '0.35rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.8rem', textAlign: 'center' }} />

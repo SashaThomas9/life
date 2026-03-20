@@ -24,13 +24,13 @@ export default function Training() {
   const [goalActivityToAdd, setGoalActivityToAdd] = useState('');
 
   const ACTIVITIES = [
-    { id: 'running', label: 'Running', emoji: '🏃', unit: 'km' },
-    { id: 'cycling', label: 'Cycling', emoji: '🚴', unit: 'km' },
-    { id: 'swimming', label: 'Swimming', emoji: '🏊', unit: 'm' },
-    { id: 'gym', label: 'Gym', emoji: '🏋️', unit: null },
-    { id: 'elliptical', label: 'Elliptical', emoji: '🔄', unit: 'km' },
-    { id: 'pilates', label: 'Pilates', emoji: '🧘', unit: null },
-    { id: 'other', label: 'Other', emoji: '⚡', unit: 'km' },
+    { id: 'running', label: 'Running', unit: 'km' },
+    { id: 'cycling', label: 'Cycling', unit: 'km' },
+    { id: 'swimming', label: 'Swimming', unit: 'm' },
+    { id: 'gym', label: 'Gym', unit: null },
+    { id: 'elliptical', label: 'Elliptical', unit: 'km' },
+    { id: 'pilates', label: 'Pilates', unit: null },
+    { id: 'other', label: 'Other', unit: 'km' },
   ];
 
   // Helper: find the Saturday on or before a given date
@@ -369,7 +369,7 @@ export default function Training() {
               {todayWorkouts.length > 0 ? (
                 todayWorkouts.map(w => (
                   <div key={w?.id || Math.random()} style={{ background: '#fed7aa', padding: '0.75rem', borderRadius: '6px', marginBottom: '0.5rem', fontWeight: '600', color: '#7c2d12' }}>
-                    <p style={{ margin: 0 }}>{ACTIVITIES.find(a => a.id === w?.activity)?.emoji || '⚡'} {w?.type || 'Workout'}</p>
+                    <p style={{ margin: 0 }}>{ACTIVITIES.find(a => a.id === w?.activity)?.label || 'Workout'}: {w?.type || 'Workout'}</p>
                     {(w?.duration || w?.distance) && <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', fontWeight: '400' }}>{w?.duration && `${w.duration}min`} {w?.distance && `${w.distance}${ACTIVITIES.find(a => a.id === w?.activity)?.unit || 'km'}`}</p>}
                   </div>
                 ))
@@ -380,7 +380,7 @@ export default function Training() {
             <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '0.95rem' }}>Log What I Did</h4>
             <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
               <select value={logActivity} onChange={(e) => setLogActivity(e.target.value)} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #fed7aa', fontFamily: 'inherit' }}>
-                {ACTIVITIES.map(a => <option key={a.id} value={a.id}>{a.emoji} {a.label}</option>)}
+                {ACTIVITIES.map(a => <option key={a.id} value={a.id}>{a.label}</option>)}
               </select>
               <input type="number" placeholder="Min" value={logDuration} onChange={(e) => setLogDuration(e.target.value)} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #fed7aa', flex: '1', minWidth: '80px', maxWidth: '120px' }} />
               <input type="number" placeholder="Dist" step="0.1" value={logDistance} onChange={(e) => setLogDistance(e.target.value)} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #fed7aa', flex: '1', minWidth: '80px', maxWidth: '120px' }} />
@@ -407,7 +407,7 @@ export default function Training() {
                   <p style={{ margin: '0 0 0.5rem 0', fontWeight: '600', fontSize: '0.85rem', color: '#92400e' }}>Today's Logs:</p>
                   {existingLogs.map((log, i) => (
                     <div key={log.id || i} style={{ background: '#fef3c7', padding: '0.5rem', borderRadius: '4px', marginBottom: '0.3rem', fontSize: '0.8rem' }}>
-                      <span style={{ fontWeight: '600' }}>{ACTIVITIES.find(a => a.id === log.activity)?.emoji || '⚡'} </span>
+                      <span style={{ fontWeight: '600' }}>{ACTIVITIES.find(a => a.id === log.activity)?.label || 'Other'}: </span>
                       {log.description && <span>{log.description} </span>}
                       {log.duration && <span style={{ color: '#92400e' }}>• {log.duration}min </span>}
                       {log.distance && <span style={{ color: '#92400e' }}>• {log.distance}{ACTIVITIES.find(a => a.id === log.activity)?.unit || 'km'}</span>}
@@ -442,7 +442,7 @@ export default function Training() {
               
               return (
                 <div key={act.id} style={{ background: 'white', padding: '1rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                  <p style={{ margin: '0 0 0.5rem 0', fontWeight: '700', fontSize: '1rem' }}>{act.emoji} {act.label}</p>
+                  <p style={{ margin: '0 0 0.5rem 0', fontWeight: '700', fontSize: '1rem' }}>{act.label}</p>
                   <p style={{ margin: '0 0 0.25rem 0', fontSize: '0.85rem', color: '#475569' }}>
                     {total.count} session{total.count !== 1 ? 's' : ''}
                     {goal.increment > 0 && <span style={{ fontSize: '0.7rem', color: '#6366f1' }}> (+{goal.increment}%/wk)</span>}
@@ -491,7 +491,7 @@ export default function Training() {
                 <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
                   <select value={goalActivityToAdd} onChange={(e) => setGoalActivityToAdd(e.target.value)} style={{ flex: 1, padding: '0.4rem', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.8rem' }}>
                     <option value="">Add activity...</option>
-                    {available.map(a => <option key={a.id} value={a.id}>{a.emoji} {a.label}</option>)}
+                    {available.map(a => <option key={a.id} value={a.id}>{a.label}</option>)}
                   </select>
                   <button type="button" onClick={() => { if (goalActivityToAdd) { setWeeklyGoals(prev => ({ ...prev, [goalActivityToAdd]: { duration: 0, distance: 0 } })); setGoalActivityToAdd(''); } }} disabled={!goalActivityToAdd} style={{ padding: '0.4rem 0.8rem', borderRadius: '6px', border: 'none', background: goalActivityToAdd ? '#6366f1' : '#cbd5e1', color: 'white', fontWeight: '600', cursor: goalActivityToAdd ? 'pointer' : 'default', fontSize: '0.8rem' }}>+ Add</button>
                 </div>
@@ -515,7 +515,7 @@ export default function Training() {
                       if (!act) return null;
                       return (
                         <tr key={act.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                          <td style={{ padding: '0.4rem', fontWeight: '600', whiteSpace: 'nowrap' }}>{act.emoji} {act.label}</td>
+                          <td style={{ padding: '0.4rem', fontWeight: '600', whiteSpace: 'nowrap' }}>{act.label}</td>
                           <td style={{ padding: '0.4rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
                               <input type="number" placeholder="0" value={weeklyGoals[act.id]?.duration || ''} onChange={(e) => setWeeklyGoals(prev => ({ ...prev, [act.id]: { ...prev[act.id], duration: e.target.value ? parseInt(e.target.value) : 0 } }))} style={{ width: '55px', padding: '0.3rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.8rem', textAlign: 'center' }} />
@@ -574,7 +574,7 @@ export default function Training() {
                   workoutList.map(w => (
                     <div key={w?.id || Math.random()} style={{ background: '#e0e7ff', padding: '0.4rem', borderRadius: '4px', marginBottom: '0.2rem', fontSize: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
                       <div style={{ flex: 1 }}>
-                        <p style={{ margin: 0, fontWeight: '600', color: '#6366f1' }}>{ACTIVITIES.find(a => a.id === w?.activity)?.emoji || '⚡'} {w?.type || 'Workout'}</p>
+                        <p style={{ margin: 0, fontWeight: '600', color: '#6366f1' }}>{ACTIVITIES.find(a => a.id === w?.activity)?.label || 'Workout'}: {w?.type || 'Workout'}</p>
                         {(w?.duration || w?.distance) && <p style={{ margin: '0.1rem 0 0 0', color: '#64748b', fontSize: '0.7rem' }}>{w?.duration && `${w.duration}min`} {w?.distance && `${w.distance}${ACTIVITIES.find(a => a.id === w?.activity)?.unit || 'km'}`}</p>}
                         {w?.recurring && <p style={{ margin: '0.1rem 0 0 0', color: '#8b5cf6', fontSize: '0.65rem', fontStyle: 'italic' }}>Recurring</p>}
                       </div>
@@ -596,7 +596,7 @@ export default function Training() {
           <div style={{ background: 'white', padding: '1.5rem', borderRadius: '12px', width: '90%', maxWidth: '380px' }}>
             <h3 style={{ margin: 0, marginBottom: '1rem' }}>Add Workout</h3>
             <select value={activityType} onChange={(e) => setActivityType(e.target.value)} className="form-control" style={{ marginBottom: '1rem', padding: '0.5rem' }}>
-              {ACTIVITIES.map(a => <option key={a.id} value={a.id}>{a.emoji} {a.label}</option>)}
+              {ACTIVITIES.map(a => <option key={a.id} value={a.id}>{a.label}</option>)}
             </select>
             <input
               type="text"
