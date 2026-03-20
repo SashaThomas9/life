@@ -92,31 +92,36 @@ function App() {
           className={`tab-btn ${activeTab === 'home' ? 'active' : ''}`}
           onClick={() => setActiveTab('home')}
         >
-          Home
+          <span className="tab-icon">🏠</span>
+          <span className="tab-label">Home</span>
         </button>
         <button
           className={`tab-btn ${activeTab === 'work' ? 'active' : ''}`}
           onClick={() => setActiveTab('work')}
         >
-          Work
+          <span className="tab-icon">💼</span>
+          <span className="tab-label">Work</span>
         </button>
         <button
           className={`tab-btn ${activeTab === 'life' ? 'active' : ''}`}
           onClick={() => setActiveTab('life')}
         >
-          Life
+          <span className="tab-icon">🌱</span>
+          <span className="tab-label">Life</span>
         </button>
         <button
           className={`tab-btn ${activeTab === 'training' ? 'active' : ''}`}
           onClick={() => setActiveTab('training')}
         >
-          Training
+          <span className="tab-icon">🏋️</span>
+          <span className="tab-label">Training</span>
         </button>
         <button
           className={`tab-btn ${activeTab === 'history' ? 'active' : ''}`}
           onClick={() => setActiveTab('history')}
         >
-          Calendar
+          <span className="tab-icon">📅</span>
+          <span className="tab-label">Calendar</span>
         </button>
       </nav>
     </div>
