@@ -21,6 +21,7 @@ export default function Training() {
   const [logActivity, setLogActivity] = useState('running');
   const [logDuration, setLogDuration] = useState('');
   const [logDistance, setLogDistance] = useState('');
+  const [goalActivityToAdd, setGoalActivityToAdd] = useState('');
 
   const ACTIVITIES = [
     { id: 'running', label: 'Running', emoji: '🏃', unit: 'km' },
@@ -28,6 +29,7 @@ export default function Training() {
     { id: 'swimming', label: 'Swimming', emoji: '🏊', unit: 'm' },
     { id: 'gym', label: 'Gym', emoji: '🏋️', unit: null },
     { id: 'elliptical', label: 'Elliptical', emoji: '🔄', unit: 'km' },
+    { id: 'pilates', label: 'Pilates', emoji: '🧘', unit: null },
     { id: 'other', label: 'Other', emoji: '⚡', unit: 'km' },
   ];
 
@@ -477,22 +479,70 @@ export default function Training() {
         
         {editingGoals && (
           <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #cbd5e1' }}>
-            <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '0.9rem' }}>Edit Week {currentWeek} Goals</h4>
-            <p style={{ margin: '0 0 0.75rem 0', fontSize: '0.75rem', color: '#64748b' }}>Override the auto-calculated goals for this week. Leave blank to use calculated values.</p>
-            {ACTIVITIES.map(act => (
-              <div key={act.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-                <span style={{ width: '90px', fontSize: '0.85rem', fontWeight: '600' }}>{act.emoji} {act.label}</span>
-                <input type="number" placeholder="min" value={weeklyGoals[act.id]?.duration || ''} onChange={(e) => setWeeklyGoals(prev => ({ ...prev, [act.id]: { ...prev[act.id], duration: e.target.value ? parseInt(e.target.value) : 0 } }))} style={{ width: '80px', padding: '0.4rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.8rem' }} />
-                <span style={{ fontSize: '0.75rem', color: '#64748b' }}>min</span>
-                {act.unit && (
-                  <>
-                    <input type="number" step="0.1" placeholder={act.unit} value={weeklyGoals[act.id]?.distance || ''} onChange={(e) => setWeeklyGoals(prev => ({ ...prev, [act.id]: { ...prev[act.id], distance: e.target.value ? parseFloat(e.target.value) : 0 } }))} style={{ width: '80px', padding: '0.4rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.8rem' }} />
-                    <span style={{ fontSize: '0.75rem', color: '#64748b' }}>{act.unit}</span>
-                  </>
-                )}
+            <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '0.9rem' }}>Edit Week {currentWeek} Goals</h4>
+            <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.7rem', color: '#64748b' }}>Override auto-calculated goals for this week.</p>
+            
+            {/* Add activity selector */}
+            {(() => {
+              const goalsActivityIds = Object.keys(weeklyGoals);
+              const available = ACTIVITIES.filter(a => !goalsActivityIds.includes(a.id));
+              if (available.length === 0) return null;
+              return (
+                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                  <select value={goalActivityToAdd} onChange={(e) => setGoalActivityToAdd(e.target.value)} style={{ flex: 1, padding: '0.4rem', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.8rem' }}>
+                    <option value="">Add activity...</option>
+                    {available.map(a => <option key={a.id} value={a.id}>{a.emoji} {a.label}</option>)}
+                  </select>
+                  <button type="button" onClick={() => { if (goalActivityToAdd) { setWeeklyGoals(prev => ({ ...prev, [goalActivityToAdd]: { duration: 0, distance: 0 } })); setGoalActivityToAdd(''); } }} disabled={!goalActivityToAdd} style={{ padding: '0.4rem 0.8rem', borderRadius: '6px', border: 'none', background: goalActivityToAdd ? '#6366f1' : '#cbd5e1', color: 'white', fontWeight: '600', cursor: goalActivityToAdd ? 'pointer' : 'default', fontSize: '0.8rem' }}>+ Add</button>
+                </div>
+              );
+            })()}
+
+            {Object.keys(weeklyGoals).length > 0 && (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid #cbd5e1', textAlign: 'left' }}>
+                      <th style={{ padding: '0.3rem 0.4rem', color: '#475569', fontWeight: '600' }}>Activity</th>
+                      <th style={{ padding: '0.3rem 0.4rem', color: '#475569', fontWeight: '600' }}>Duration</th>
+                      <th style={{ padding: '0.3rem 0.4rem', color: '#475569', fontWeight: '600' }}>Distance</th>
+                      <th style={{ padding: '0.3rem 0.2rem' }}></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.keys(weeklyGoals).map(actId => {
+                      const act = ACTIVITIES.find(a => a.id === actId);
+                      if (!act) return null;
+                      return (
+                        <tr key={act.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                          <td style={{ padding: '0.4rem', fontWeight: '600', whiteSpace: 'nowrap' }}>{act.emoji} {act.label}</td>
+                          <td style={{ padding: '0.4rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                              <input type="number" placeholder="0" value={weeklyGoals[act.id]?.duration || ''} onChange={(e) => setWeeklyGoals(prev => ({ ...prev, [act.id]: { ...prev[act.id], duration: e.target.value ? parseInt(e.target.value) : 0 } }))} style={{ width: '55px', padding: '0.3rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.8rem', textAlign: 'center' }} />
+                              <span style={{ color: '#94a3b8', fontSize: '0.65rem' }}>min</span>
+                            </div>
+                          </td>
+                          <td style={{ padding: '0.4rem' }}>
+                            {act.unit ? (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                                <input type="number" step="0.1" placeholder="0" value={weeklyGoals[act.id]?.distance || ''} onChange={(e) => setWeeklyGoals(prev => ({ ...prev, [act.id]: { ...prev[act.id], distance: e.target.value ? parseFloat(e.target.value) : 0 } }))} style={{ width: '55px', padding: '0.3rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.8rem', textAlign: 'center' }} />
+                                <span style={{ color: '#94a3b8', fontSize: '0.65rem' }}>{act.unit}</span>
+                              </div>
+                            ) : (
+                              <span style={{ color: '#cbd5e1' }}>—</span>
+                            )}
+                          </td>
+                          <td style={{ padding: '0.4rem', textAlign: 'center' }}>
+                            <button type="button" onClick={() => setWeeklyGoals(prev => { const copy = { ...prev }; delete copy[act.id]; return copy; })} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1rem', padding: 0 }}>×</button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
-            ))}
-            <button onClick={handleSaveGoals} className="btn-primary" style={{ marginTop: '0.5rem' }}>Save Goals</button>
+            )}
+            <button onClick={handleSaveGoals} className="btn-primary" style={{ marginTop: '0.5rem', width: '100%' }}>Save Goals</button>
           </div>
         )}
       </div>
